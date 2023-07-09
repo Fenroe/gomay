@@ -1,7 +1,5 @@
-import { user } from "./user"
-import { setUser } from "./setUser"
+import { userAtom } from "./userAtom"
 
 export {
-    user,
-    setUser
+    userAtom
 }

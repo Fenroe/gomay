@@ -1,0 +1,1 @@
+export const requiredFieldErrorMessage:string = "This field is required"

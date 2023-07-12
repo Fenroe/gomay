@@ -1,13 +1,17 @@
 import { ChakraProvider } from "@chakra-ui/react"
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
 import { listenForAuthChange } from "./firebase"
-import { Landing, Login, Signup } from "./pages"
+import { Login, Signup } from "./pages"
 import { User } from "@firebase/auth-types"
 import { userAtom } from "./store"
-import { useSetAtom } from "jotai"
 import { useCallback } from "react"
+import { useSetAtom } from "jotai"
+import { HomeRoute, PrivateRoutes } from "./components"
+import { QueryClient, QueryClientProvider } from "react-query"
 
 const App = () => {
+    const queryClient = new QueryClient()
+
     const setUser = useSetAtom(userAtom)
 
     const handleAuthChange = useCallback((user:User | null) => {
@@ -18,15 +22,19 @@ const App = () => {
     listenForAuthChange(handleAuthChange)
 
     return (
-        <ChakraProvider>
-            <Router>
-                <Routes>
-                    <Route path="/" element={<Landing />}></Route>
-                    <Route path="/login" element={<Login />}></Route>
-                    <Route path="/signup" element={<Signup />}></Route>
-                </Routes>
-            </Router>
-        </ChakraProvider>
+        <QueryClientProvider client={queryClient}>
+            <ChakraProvider>
+                <Router>
+                    <Routes>
+                        <Route path="/" element={<HomeRoute />} />
+                        <Route element={<PrivateRoutes authRoute={<Navigate to="/"/>} />}>
+                            <Route path="/login" element={<Login />}></Route>
+                            <Route path="/signup" element={<Signup />}></Route>
+                        </Route>
+                    </Routes>
+                </Router>
+            </ChakraProvider>
+        </QueryClientProvider>
     )
 }
 

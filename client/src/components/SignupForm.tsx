@@ -5,7 +5,7 @@ import { TextField } from "./TextField"
 import { useSignupData } from "../hooks"
 
 export const SignupForm = () => {
-    const { initialValues, validationSchema, handleSubmit, authenticationError } = useSignupData()
+    const { initialValues, validationSchema, handleSubmit, authenticationError, googleLogin } = useSignupData()
 
     return (
         <Formik
@@ -63,6 +63,7 @@ export const SignupForm = () => {
                             Continue
                         </Button>
                         <Button
+                        onClick={googleLogin}
                         variant="outline"
                         width="100%">
                             Continue With Google

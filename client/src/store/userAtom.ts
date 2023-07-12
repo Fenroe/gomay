@@ -1,4 +1,4 @@
 import { atom } from "jotai"
 import { User } from "@firebase/auth-types"
 
-export const userAtom = atom<User | null>(null)
+export const userAtom = atom<User | null | undefined>(undefined)

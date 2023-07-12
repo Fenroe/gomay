@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import { emailLogin } from "../firebase"
+import { continueWithGoogle, emailLogin } from "../firebase"
 import { requiredFieldErrorMessage } from "../data"
 import { useNavigate } from 'react-router-dom'
 import { FormikHelpers } from 'formik'
@@ -49,10 +49,21 @@ export const useLoginData = () => {
         }
     }, [])
 
+    const googleLogin = useCallback(async () => {
+        try {
+            setAuthenticationError("")
+            await continueWithGoogle()
+            navigate("/")
+        } catch (error) {
+            if (error instanceof Error) setAuthenticationError(error.message)
+        }
+    }, [])
+
     return {
         initialValues,
         validationSchema,
         authenticationError,
-        handleSubmit
+        handleSubmit,
+        googleLogin
     }
 }
